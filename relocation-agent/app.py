@@ -120,9 +120,17 @@ if st.session_state.step < len(PROFILE_QUESTIONS):
         else:
             answer = selected_zone
 
+    elif current_q["type"] == "optional_text":
+        text = st.text_area(
+            "Feel free to share anything — preferences, concerns, specific needs...",
+            height=150,
+            placeholder="e.g. I have a dog, I need a quiet street, I prefer modern buildings..."
+        )
+        answer = text.strip() if text.strip() else "No additional comments"
+
     if st.button("Next →"):
-        if answer:
-            st.session_state.answers[current_q["key"]] = answer
+        if answer or current_q["type"] == "optional_text":
+            st.session_state.answers[current_q["key"]] = answer or "No additional comments"
             st.session_state.step += 1
             st.rerun()
         else:
